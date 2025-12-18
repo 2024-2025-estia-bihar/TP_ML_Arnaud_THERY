@@ -101,7 +101,8 @@ Puis ouvrir le notebook souhaité dans `notebooks/`.
 
 **Objectif:** Développer un modèle de prédiction de température à 2 mètres du sol avec un horizon de 24 heures et un pas de temps de 3 heures.
 
-**Données:** 
+**Données:**
+
 - **Source:** Open-Meteo Historical Weather API
 - **Localisation:** Ajaccio, France (41.9276°N, 8.7381°E)
 - **Période:** 2015-2024 (10 ans d'historique)
@@ -119,27 +120,30 @@ Puis ouvrir le notebook souhaité dans `notebooks/`.
 8. **Évaluation & Comparaison:** Métriques MAE/RMSE/MAPE, cross-validation
 
 **Split Chronologique:**
+
 - Train: 85% (2015-2023)
-- Validation: 5% 
+- Validation: 5%
 - Test: 10% (2024 + anomalies détectées)
 
 **Résultats Finaux:**
 
-| Modèle                    | MAE (°C) | RMSE (°C) | MAPE (%) | Interprétabilité |
-| ------------------------- | -------- | --------- | -------- | ---------------- |
-| ARIMA(3,0,2)              | 1.65     | 2.12      | 12.3     | ★★★★★            |
-| SARIMA(3,0,2)×(0,0,1,8)   | 1.42     | 1.78      | 10.1     | ★★★★☆            |
-| SARIMAX(3,0,2)×(1,0,1,8)  | 1.38     | 1.72      | 9.8      | ★★★★☆            |
-| RandomForest              | 1.18     | 1.23      | 8.2      | ★★★☆☆            |
-| GradientBoosting          | 1.21     | 1.26      | 8.5      | ★★★☆☆            |
-| LinearRegression          | 1.72     | 2.15      | 11.2     | ★★★★★            |
+| Modèle                   | MAE (°C) | RMSE (°C) | MAPE (%) | Interprétabilité |
+| ------------------------ | -------- | --------- | -------- | ---------------- |
+| ARIMA(3,0,2)             | 1.65     | 2.12      | 12.3     | ★★★★★            |
+| SARIMA(3,0,2)×(0,0,1,8)  | 1.42     | 1.78      | 10.1     | ★★★★☆            |
+| SARIMAX(3,0,2)×(1,0,1,8) | 1.38     | 1.72      | 9.8      | ★★★★☆            |
+| RandomForest             | 1.18     | 1.23      | 8.2      | ★★★☆☆            |
+| GradientBoosting         | 1.21     | 1.26      | 8.5      | ★★★☆☆            |
+| LinearRegression         | 1.72     | 2.15      | 11.2     | ★★★★★            |
 
 **Recommandations:**
+
 - ✅ **Court-terme (<24h):** RandomForest (RMSE 1.23°C, meilleure accuracy)
 - ✅ **Long-terme (avec explicabilité):** SARIMA (RMSE 1.78°C, modèle interprétable)
 - ✅ **Production:** RandomForest + monitoring (détection anomalies saisonnières)
 
 **Analyses Avancées:**
+
 - Détection et segmentation des anomalies (périodes chaudes/froides/normales)
 - Quantification de l'impact de l'humidité sur la précision (via SARIMAX)
 - Analyse résidus pour validation hypothèses statistiques
