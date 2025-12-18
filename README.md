@@ -102,6 +102,7 @@ Puis ouvrir le notebook souhaité dans `notebooks/`.
 **Objectif:** Développer un modèle de prédiction de température à 2 mètres du sol avec un horizon de 24 heures et un pas de temps de 3 heures.
 
 #### 1️⃣ Acquisition des Données
+
 - ✅ **Source:** Open-Meteo Historical Weather API
 - ✅ **Localisation:** Ajaccio, France (41.9276°N, 8.7381°E)
 - ✅ **Période:** 2015-2024 (10 ans d'historique - déterminée via analyse exploratoire)
@@ -109,22 +110,26 @@ Puis ouvrir le notebook souhaité dans `notebooks/`.
 - ✅ **Vérification données manquantes:** Interpolation linéaire appliquée si nécessaire
 
 #### 2️⃣ Transformation de la Série Temporelle
+
 - ✅ **Agrégation horaire → 3h:** Moyenne des valeurs mesurées à {00h,01h,02h} → 00h; {03h,04h,05h} → 03h, etc.
 - ✅ **Compression:** 87 840 observations horaires → 10 980 observations 3h
 - ✅ **Utilisation dans toutes les expérimentations**
 
 #### 3️⃣ Analyse Exploratoire
+
 - ✅ **Décomposition saisonnière:** Tendance long-terme, saisonnalité journalière (période=8), résidus
 - ✅ **Visualisations:** Série temporelle, patterns saisonniers, anomalies
 - ✅ **Identification:** Cycle journalier de 24h, variations inter-saisonnières
 
 #### 4️⃣ Expérimentation Statistique
+
 - ✅ **ARIMA(3,0,2):** Tuning exhaustif p∈[0,3], d∈[0,2], q∈[0,3]
 - ✅ **SARIMA(3,0,2)×(0,0,1,8):** Intégration saisonnalité journalière (P,D,Q,s)
 - ✅ **SARIMAX(3,0,2)×(1,0,1,8):** Variable exogène humidité + auto-tuning
 - ✅ **Hyperparameter tuning:** Grid search validé sur ensemble Validation
 
 #### 5️⃣ Expérimentation ML - Régression
+
 - ✅ **Feature Engineering:**
   - Lags: t-1, t-2, t-3, t-8, t-16, t-32
   - Rolling means: fenêtres 3h et 8h (avec shift pour éviter data leakage)
@@ -134,6 +139,7 @@ Puis ouvrir le notebook souhaité dans `notebooks/`.
 - ✅ **Configurations multiples:** Sélection features, hyperparamètres optimisés
 
 #### 6️⃣ Analyse Résidus & Évaluation
+
 - ✅ **Distribution erreurs:** Histogrammes, tests normalité
 - ✅ **Autocorrélation résidus:** ACF, PACF, test Ljung-Box
 - ✅ **Métriques comparaison:** MAE, RMSE, MAPE, R²
@@ -176,6 +182,7 @@ Puis ouvrir le notebook souhaité dans `notebooks/`.
 **Objectif:** Classifier des photos de champs en 4 classes (sol, maïs, herbes, maïs+herbes).
 
 #### 1️⃣ Données & Exploration
+
 - ✅ **Dataset:** Labeled Corn Dataset (Kaggle)
 - ✅ **Classes Phase 1:** Chao (sol), Milho (maïs), Ervas (herbes) - 3 classes
 - ✅ **Classes Phase 2:** + Milho_ervas (maïs+herbes) - 4 classes
@@ -183,6 +190,7 @@ Puis ouvrir le notebook souhaité dans `notebooks/`.
 - ✅ **Découvertes:** Équilibre parfait (CV<5%), signatures colorimétriques distinctes
 
 #### 2️⃣ Prétraitement & Augmentation
+
 - ✅ **Réduction taille:** Images redimensionnées 224×224 (standard VGG16/ResNet)
 - ✅ **Normalisation:** Rescale [0,255]→[0,1], puis ImageNet normalization
 - ✅ **Augmentation** (train uniquement):
@@ -195,6 +203,7 @@ Puis ouvrir le notebook souhaité dans `notebooks/`.
 #### 3️⃣ Expérimentations - Phase 1 (3 classes)
 
 **Modèle 1: Baseline CNN (Custom)**
+
 - ✅ Architecture: 3 blocs Conv2D (32→64→128 filtres)
 - ✅ Chaque bloc: Conv2D + BatchNorm + ReLU + MaxPool2D + Dropout(0.25)
 - ✅ Classifier: Flatten → Dense(256) + ReLU + Dropout(0.5) → Dense(3)
@@ -203,23 +212,27 @@ Puis ouvrir le notebook souhaité dans `notebooks/`.
 - ✅ **Résultats:** ~70.67% accuracy test, Par classe: Chao 99% | Milho 75% | Ervas 38%
 
 **Modèle 2: VGG16 (Transfer Learning)**
+
 - ✅ Backbone préentraîné ImageNet (congelé initial, fine-tuning)
 - ✅ Tête de classification personnalisée
 - ✅ **Résultats:** ~89.00% accuracy test
 - ✅ Amélioration +18% vs Baseline (meilleure généralisation)
 
 **Modèle 3: ResNet50 (Transfer Learning)**
+
 - ✅ Architecture résiduelle profonde, bonds sur plusieurs couches
 - ✅ Backbone préentraîné ImageNet + fine-tuning
 - ✅ **Résultats:** ~97.67% accuracy test (meilleure)
 - ✅ Amélioration +8.67% vs VGG16 (robustesse résiduelle)
 
 #### 4️⃣ Expérimentations - Phase 2 (4 classes)
+
 - ✅ Extension naturelle avec ajout classe Milho_ervas
 - ✅ Réentraînement tous modèles (Baseline, VGG16, ResNet50)
 - ✅ Comparaison performance 3 vs 4 classes
 
 #### 5️⃣ Évaluation & Performances
+
 - ✅ **Métriques:**
   - Accuracy (train/val/test)
   - Courbes Loss (train/val) - détection overfitting
@@ -231,6 +244,7 @@ Puis ouvrir le notebook souhaité dans `notebooks/`.
   - Model Checkpoint: sauvegarde meilleur modèle
 
 #### 6️⃣ Interprétabilité - LIME (Local Interpretable Model-agnostic Explanations)
+
 - ✅ **Visualisation superpixels:** Régions importantes pour prédiction
 - ✅ **Explication par classe:** Top-k features LIME par image test
 - ✅ **Affichage:** Image originale + Prédiction + Zones explicatives
@@ -239,13 +253,14 @@ Puis ouvrir le notebook souhaité dans `notebooks/`.
 
 **Résultats Synthétiques 3 Classes:**
 
-| Modèle       | Accuracy 3C | Accuracy 4C | Par Classe (3C)           | Notes                          |
-| ------------ | ----------- | ----------- | ------------------------- | ------------------------------ |
-| Baseline CNN | 70.67%      | ~68%        | Chao 99% \| Milho 75% \| Ervas 38% | ✅ Custom CNN, Early stop   |
-| VGG16        | 89.00%      | ~85%        | Meilleure sur Ervas       | ✅ Transfer learning         |
-| ResNet50     | 97.67%      | ~87%        | **Optimal**, Moins confusion | ✅ Architecture résiduelle   |
+| Modèle       | Accuracy 3C | Accuracy 4C | Par Classe (3C)                    | Notes                      |
+| ------------ | ----------- | ----------- | ---------------------------------- | -------------------------- |
+| Baseline CNN | 70.67%      | ~68%        | Chao 99% \| Milho 75% \| Ervas 38% | ✅ Custom CNN, Early stop  |
+| VGG16        | 89.00%      | ~85%        | Meilleure sur Ervas                | ✅ Transfer learning       |
+| ResNet50     | 97.67%      | ~87%        | **Optimal**, Moins confusion       | ✅ Architecture résiduelle |
 
 **Recommandations Production:**
+
 - ResNet50 pour 4 classes (meilleure accuracy + stabilité)
 - VGG16 alternative si ressources limitées
 - LIME pour explicabilité client (zones de confiance visualisées)
